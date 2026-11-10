@@ -26,6 +26,9 @@ tools/*.log
 tools/venv/
 tools/.venv/
 
+# WorkBuddy workspace data
+.workbuddy/
+
 # Temporary files
 *.log
 *.tmp
