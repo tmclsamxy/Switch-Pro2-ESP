@@ -1,0 +1,72 @@
+name: Build firmware
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "firmware/**"
+      - "tools/**"
+      - ".github/workflows/**"
+  pull_request:
+    paths:
+      - "firmware/**"
+      - "tools/**"
+      - ".github/workflows/**"
+  workflow_dispatch:
+
+jobs:
+  bridge:
+    name: bridge / ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: pro2
+            mode: NINTENDO_EXPERIMENT_MODE
+          - name: xinput
+            mode: XINPUT_EXPERIMENT_MODE
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build esp32s3_switch2_bridge
+        uses: espressif/esp-idf-ci-action@v1
+        with:
+          esp_idf_version: v5.4.2
+          target: esp32s3
+          path: firmware/esp32s3_switch2_bridge
+          command: idf.py -B build -DDEVICE_DEFAULT_MODE=${{ matrix.mode }} build
+
+      - name: Collect artifacts
+        run: |
+          mkdir -p out/${{ matrix.name }}
+          cp firmware/esp32s3_switch2_bridge/build/*.bin out/${{ matrix.name }}/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: esp32s3-bridge-${{ matrix.name }}
+          path: out/${{ matrix.name }}/
+
+  dualsense:
+    name: dualsense / hid_only
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build esp32s3_dualsense_identity_experiment
+        uses: espressif/esp-idf-ci-action@v1
+        with:
+          esp_idf_version: v5.4.2
+          target: esp32s3
+          path: firmware/esp32s3_dualsense_identity_experiment
+          command: idf.py -B build -DV5_5_DS5_PROFILE=hid_only build
+
+      - name: Collect artifacts
+        run: |
+          mkdir -p out/dualsense-hid-only
+          cp firmware/esp32s3_dualsense_identity_experiment/build/*.bin out/dualsense-hid-only/
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: esp32s3-dualsense-hid-only
+          path: out/dualsense-hid-only/

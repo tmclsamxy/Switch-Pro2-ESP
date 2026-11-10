@@ -1,0 +1,39 @@
+# Local build output
+build/
+work/
+logs/
+bin/
+obj/
+.vs/
+.toolchain/
+__pycache__/
+_handoff/
+CODEX_HANDOFF_*.md
+
+# Generated ESP-IDF state
+firmware/esp32s3_switch2_bridge/build/
+firmware/esp32s3_switch2_bridge/managed_components/
+firmware/esp32s3_switch2_bridge/sdkconfig
+firmware/esp32s3_switch2_bridge/sdkconfig.old
+firmware/esp32s3_dualsense_identity_experiment/build/
+firmware/esp32s3_dualsense_identity_experiment/managed_components/
+firmware/esp32s3_dualsense_identity_experiment/sdkconfig
+firmware/esp32s3_dualsense_identity_experiment/sdkconfig.old
+
+# Local tooling output
+tools/*.exe
+tools/*.log
+tools/venv/
+tools/.venv/
+
+# Temporary files
+*.log
+*.tmp
+*.bak
+*.user
+*.suo
+*.pdb
+*.ilk
+*.obj
+*.class
+*.zip
